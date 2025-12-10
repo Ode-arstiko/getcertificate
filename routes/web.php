@@ -16,6 +16,8 @@ Route::get('/admin', [AdminDashboardController::class, 'index']);
 
 Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.user');
 Route::post('/admin/user/store', [AdminUserController::class, 'store'])->name('admin.user.store');
+Route::delete('/admin/user/delete/{id}', [AdminUserController::class, 'destroy'])->name('admin.user.delete');
+Route::put('/admin/user/update/{id}', [AdminUserController::class, 'update'])->name('admin.user.update');
 
 Route::get('/admin/receiver', [AdminReceiverController::class, 'index']);
 
