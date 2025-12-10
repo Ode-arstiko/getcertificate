@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('certificates', function (Blueprint $table) {
+        Schema::create('ctemplates', function (Blueprint $table) {
             $table->id();
-            $table->string('background');
-            $table->text('elements');
+            $table->string('template_name');
+            $table->longText('elements');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('certificates');
+        Schema::dropIfExists('ctemplates');
     }
 };
