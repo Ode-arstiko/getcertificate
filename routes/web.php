@@ -27,3 +27,6 @@ Route::get('/admin/certificate', [AdminCertificateController::class, 'index']);
 Route::get('/admin/certificate/create/{id}', [AdminCertificateController::class, 'create']);
 Route::post('/admin/certificate/store', [AdminCertificateController::class, 'store']);
 Route::post('/admin/certificate/save', [AdminCertificateController::class, 'saveCertificate']);
+Route::get('/admin/certificate/detail/{id}', [AdminCertificateController::class, 'zipDetails']);
+Route::get('/download-certificate/{id}', [AdminCertificateController::class, 'downlaodCertificate']);
+Route::get('/downlaod-certificate-zip/{id}', [AdminCertificateController::class, 'downloadZip']);

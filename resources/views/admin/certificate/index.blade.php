@@ -1,7 +1,7 @@
 <div class="card w-100">
     <div class="card-body p-4">
         <div class="d-flex justify-between align-items-center">
-            <h5 class="card-title fw-semibold">Certificates</h5>
+            <h5 class="card-title fw-semibold">Zipped Certificates</h5>
             <button type="button" class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i class="ti ti-plus me-2"></i>Make Certificate
             </button>
@@ -43,7 +43,8 @@
                                                 </h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <a href="/admin/certificate/create/{{ encrypt($temp->id) }}" class="btn btn-primary mb-0 shadow"><i
+                                                <a href="/admin/certificate/create/{{ encrypt($temp->id) }}"
+                                                    class="btn btn-primary mb-0 shadow"><i
                                                         class="ti ti-send me-2"></i>Select</a>
                                             </td>
                                         </tr>
@@ -84,15 +85,20 @@
                             </td>
                             <td class="border-bottom-0">
                                 <h6 class="fw-semibold mb-0">
-                                    {{ strlen($zip->zip_name) > 60 ? substr($zip->zip_name, 0, 60) . '...' : $zip->zip_name }}
+                                    {{ strlen($zip->zip_name) > 30 ? substr($zip->zip_name, 0, 30) . '...' : $zip->zip_name }}
                                 </h6>
                             </td>
                             <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">{{ substr($zip->created_at, 0, 10) }}</p>
                             </td>
                             <td class="border-bottom-0">
-                                <a href="" class="btn btn-primary mb-0 shadow"><i
-                                        class="ti ti-pencil me-2"></i>Details</a>
+                                <a href="/admin/certificate/detail/{{ encrypt($zip->id) }}"
+                                    class="btn btn-primary mb-0 shadow"><i class="ti ti-pencil me-2"></i>Details</a>
+                            </td>
+                            <td class="border-bottom-0">
+                                <a href="/downlaod-certificate-zip/{{ encrypt($zip->id) }}"
+                                    class="btn btn-success mb-0 shadow"><i class="ti ti-download me-2"></i>Download
+                                    Zip</a>
                             </td>
                         </tr>
                     @empty

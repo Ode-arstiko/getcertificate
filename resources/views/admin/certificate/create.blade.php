@@ -16,7 +16,7 @@ Mark Marchus">
 </textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Input Champion</label>
+                    <label for="exampleInputEmail1" class="form-label">As a</label>
                     <textarea name="juara" class="form-control" id="" cols="30" rows="10"
                         placeholder="*example
 Champion number 1
