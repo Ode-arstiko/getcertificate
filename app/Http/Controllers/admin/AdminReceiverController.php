@@ -12,7 +12,10 @@ class AdminReceiverController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            'content' => 'admin.receiver.index',
+        ];
+        return view('layouts.admin.wrapper', $data);
     }
 
     /**

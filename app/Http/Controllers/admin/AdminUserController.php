@@ -12,7 +12,10 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            'content' => 'admin.user.index',
+        ];
+        return view('layouts.admin.wrapper', $data);
     }
 
     /**
