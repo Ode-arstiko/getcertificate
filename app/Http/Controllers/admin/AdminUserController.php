@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminUserController extends Controller
 {
@@ -14,53 +17,39 @@ class AdminUserController extends Controller
     {
         $data = [
             'content' => 'admin.user.index',
+            'users'   => User::all(),
         ];
         return view('layouts.admin.wrapper', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = $request->validate([
+                'name' => 'required',   
+                'email' => 'required|email|unique:users',
+                'password' => 'required',
+                'role' => 'required',
+            ]);
+    
+            User::create($data);
+            return redirect()->route('admin.user')->with('success', 'User berhasil ditambahkan!');
+        }
+        catch (Exception $e) {
+            return redirect()->route('admin.user')->with('error', 'Gagal menambahkan user!');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

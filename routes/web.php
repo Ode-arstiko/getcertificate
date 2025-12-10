@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', [AuthController::class, 'login'])->name('login');
 Route::get('/admin', [AdminDashboardController::class, 'index']);
 
-Route::get('/admin/users', [AdminUserController::class, 'index']);
+Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.user');
+Route::post('/admin/user/store', [AdminUserController::class, 'store'])->name('admin.user.store');
 
 Route::get('/admin/receiver', [AdminReceiverController::class, 'index']);
 

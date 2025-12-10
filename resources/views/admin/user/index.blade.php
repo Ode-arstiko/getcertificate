@@ -1,108 +1,111 @@
+<button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addUserModal">
+    + Tambah User
+</button>
 <div class="card w-100">
+    <!-- Modal Tambah User -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="addUserModalLabel">Tambah User Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <form action="/admin/user/store" method="POST">
+                    @csrf
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nama</label>
+                                <input type="text" name="name" class="form-control" placeholder="Masukkan nama"
+                                    required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" placeholder="Masukkan email"
+                                    required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password" class="form-control"
+                                    placeholder="Masukkan password" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Role</label>
+                                <select name="role" class="form-select">
+                                    <option value="receiver">Receiver</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <div class="card-body p-4">
-        <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5>
+        <h5 class="card-title fw-semibold mb-4">Data User</h5>
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="table-responsive">
             <table class="table text-nowrap mb-0 align-middle">
                 <thead class="text-dark fs-4">
                     <tr>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Id</h6>
+                            <h6 class="fw-semibold mb-0">No</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Assigned</h6>
+                            <h6 class="fw-semibold mb-0">Nama</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Name</h6>
+                            <h6 class="fw-semibold mb-0">Email</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Priority</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Budget</h6>
+                            <h6 class="fw-semibold mb-0">Role</h6>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">1</h6>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Sunil Joshi</h6>
-                            <span class="fw-normal">Web Designer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Elite Admin</p>
-                        </td>
-                        <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
-                            </div>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$3.9</h6>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">2</h6>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Andrew McDownland</h6>
-                            <span class="fw-normal">Project Manager</span>
-                        </td>
-                        <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Real Homes WP Theme</p>
-                        </td>
-                        <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-secondary rounded-3 fw-semibold">Medium</span>
-                            </div>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$24.5k</h6>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">3</h6>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Christopher Jamil</h6>
-                            <span class="fw-normal">Project Manager</span>
-                        </td>
-                        <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">MedicalPro WP Theme</p>
-                        </td>
-                        <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-danger rounded-3 fw-semibold">High</span>
-                            </div>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$12.8k</h6>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">4</h6>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">Nirav Joshi</h6>
-                            <span class="fw-normal">Frontend Engineer</span>
-                        </td>
-                        <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">Hosting Press HTML</p>
-                        </td>
-                        <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success rounded-3 fw-semibold">Critical</span>
-                            </div>
-                        </td>
-                        <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0 fs-4">$2.4k</h6>
-                        </td>
-                    </tr>
+                    @foreach ($users as $u)
+                        <tr>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">{{ $loop->iteration }}</h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="mb-0 fw-normal">{{ $u->name }}</h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <p class="mb-0 fw-normal">{{ $u->email }}</p>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="mb-0 fw-normal">{{ $u->role }}</h6>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
