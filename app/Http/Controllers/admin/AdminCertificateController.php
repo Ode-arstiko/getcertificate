@@ -98,6 +98,13 @@ class AdminCertificateController extends Controller
         return view('admin.certificate.generate', compact('result'));
     }
 
+    public function delete($id) {
+        $id = decrypt($id);
+        $where = Zips::find($id);
+        $where->delete();
+        return redirect()->back();
+    }
+
     public function saveCertificate(Request $request)
     {
         $request->validate([

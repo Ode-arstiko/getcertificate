@@ -61,25 +61,46 @@ class AdminCtemplateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $id = decrypt($id);
+        $data = [
+            'content' => 'admin.ctemplate.edit',
+            'ctemplate' => Ctemplates::find($id)
+        ];
+        return view('layouts.admin.wrapper', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $id = decrypt($id);
+        $request->validate([
+            'template_name' => 'required',
+            'elements' => 'required'
+        ]);
+
+        $ctemplate = Ctemplates::find($id);
+        $data = [
+            'template_name' => $request->template_name,
+            'elements' => json_encode($request->elements)
+        ];
+
+        $ctemplate->update($data);
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function delete($id)
     {
-        //
+        $id = decrypt($id);
+        $where = Ctemplates::find($id);
+        $where->delete();
+        return redirect()->back();
     }
 
     public function uploadImage(Request $request)

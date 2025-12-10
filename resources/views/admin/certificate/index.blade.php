@@ -72,7 +72,7 @@
                         <th class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Created At</h6>
                         </th>
-                        <th colspan="2" class="border-bottom-0">
+                        <th colspan="3" class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Actions</h6>
                         </th>
                     </tr>
@@ -94,6 +94,13 @@
                             <td class="border-bottom-0">
                                 <a href="/admin/certificate/detail/{{ encrypt($zip->id) }}"
                                     class="btn btn-primary mb-0 shadow"><i class="ti ti-pencil me-2"></i>Details</a>
+                            </td>
+                            <td class="border-bottom-0">
+                                <form action="/admin/certificate/delete/{{ encrypt($zip->id) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-danger" type="submit"><i class="ti ti-trash me-2"></i>Delete</button>
+                                </form>
                             </td>
                             <td class="border-bottom-0">
                                 <a href="/downlaod-certificate-zip/{{ encrypt($zip->id) }}"

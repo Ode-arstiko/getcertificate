@@ -24,6 +24,9 @@ Route::get('/admin/receiver', [AdminReceiverController::class, 'index']);
 Route::get('/admin/ctemplate', [AdminCtemplateController::class, 'index']);
 Route::get('/admin/ctemplate/create', [AdminCtemplateController::class, 'create']);
 Route::post('/admin/ctemplate/store', [AdminCtemplateController::class, 'store']);
+Route::get('/admin/ctemplate/edit/{id}', [AdminCtemplateController::class, 'edit']);
+Route::put('/admin/ctemplate/update/{id}', [AdminCtemplateController::class, 'update']);
+Route::delete('/admin/ctemplate/delete/{id}', [AdminCtemplateController::class, 'delete']);
 Route::post('/upload-image', [AdminCtemplateController::class, 'uploadImage']);
 
 Route::get('/admin/certificate', [AdminCertificateController::class, 'index']);
