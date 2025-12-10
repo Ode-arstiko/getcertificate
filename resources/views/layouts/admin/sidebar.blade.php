@@ -33,7 +33,7 @@
                         <span class="hide-menu">ALL FEATURES</span>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/users" aria-expanded="false">
+                        <a class="sidebar-link" href="/admin/users" aria-expanded="false">
                             <span>
                                 <i class="ti ti-users"></i>
                             </span>
@@ -41,11 +41,19 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/certificate" aria-expanded="false">
+                        <a class="sidebar-link" href="/admin/ctemplate" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-template"></i>
+                            </span>
+                            <span class="hide-menu">Templates</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/certificate" aria-expanded="false">
                             <span>
                                 <i class="ti ti-certificate"></i>
                             </span>
-                            <span class="hide-menu">Certificate</span>
+                            <span class="hide-menu">Certificates</span>
                         </a>
                     </li>
                 </ul>
