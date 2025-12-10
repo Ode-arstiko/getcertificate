@@ -2,3 +2,4 @@
     @if ($content)
         @include($content)
     @endif
+</div>
