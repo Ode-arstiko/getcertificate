@@ -423,6 +423,10 @@
 
         const response = await fetch('/upload-image', {
             method: 'POST',
+            credentials: "include",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
             body: formData
         });
 

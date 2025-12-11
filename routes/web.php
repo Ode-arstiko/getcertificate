@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminCertificateController;
 use App\Http\Controllers\admin\AdminCtemplateController;
 use App\Http\Controllers\admin\AdminDashboardController;
+use App\Http\Controllers\admin\AdminMakeTokenController;
 use App\Http\Controllers\admin\AdminReceiverController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\AuthController;
@@ -18,6 +19,10 @@ Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.u
 Route::post('/admin/user/store', [AdminUserController::class, 'store'])->name('admin.user.store');
 Route::delete('/admin/user/delete/{id}', [AdminUserController::class, 'destroy'])->name('admin.user.delete');
 Route::put('/admin/user/update/{id}', [AdminUserController::class, 'update'])->name('admin.user.update');
+
+Route::get('/admin/make-token', [AdminMakeTokenController::class, 'index']);
+Route::post('/admin/make-token/store', [AdminMakeTokenController::class, 'store']);
+Route::delete('/admin/make-token/delete/{id}', [AdminMakeTokenController::class, 'delete']);
 
 Route::get('/admin/receiver', [AdminReceiverController::class, 'index']);
 

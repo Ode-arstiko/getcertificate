@@ -8,8 +8,9 @@ Route::get('/produk', function () {
     return 'API OK';
 });
 
-Route::get('/ctemplates', [CtemplateController::class, 'index']);
+Route::get('/ctemplates', [CtemplateController::class, 'index'])->middleware('api.auth');
 Route::get('/ctemplates/edit/{id}', [CtemplateController::class, 'edit']);
+Route::delete('/ctemplates/delete/{id}', [CtemplateController::class, 'delete'])->middleware('api.auth');
 
 Route::get('/certificates', [CertificateController::class, 'index']);
 Route::get('/certificates/{id}', [CertificateController::class, 'zipDetails']);

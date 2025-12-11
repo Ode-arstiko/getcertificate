@@ -21,4 +21,13 @@ class CtemplateController extends Controller
             'ctemplates' => $ctemplate
         ]);
     }
+
+    public function delete($id) {
+        $where = Ctemplates::find(($id));
+        $where->delete();
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
 }

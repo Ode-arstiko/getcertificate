@@ -41,6 +41,14 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
+                        <a class="sidebar-link" href="/admin/make-token" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-api"></i>
+                            </span>
+                            <span class="hide-menu">Api Token</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/ctemplate" aria-expanded="false">
                             <span>
                                 <i class="ti ti-template"></i>
