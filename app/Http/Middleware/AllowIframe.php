@@ -18,6 +18,8 @@ class AllowIframe
         $response = $next($request);
         $response->headers->set('X-Frame-Options', 'ALLOWALL');
         $response->headers->set('Content-Security-Policy', "frame-ancestors *");
+        $response->headers->set('Access-Control-Allow-Credentials', 'true');
+        $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin') ?? '*');
         return $response;
     }
 }
