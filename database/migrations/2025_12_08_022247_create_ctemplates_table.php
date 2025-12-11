@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('template_name');
             $table->longText('elements');
+            $table->string('token');
             $table->timestamps();
         });
     }

@@ -12,8 +12,8 @@
                 @csrf
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Certificate Name</label>
-                    <input type="text" name="template_name" class="form-control" id="template_name">
-                    <input type="text" name="elements" id="elements" value="" hidden>
+                    <input type="text" name="template_name" class="form-control" value="{{ $ctemplate->template_name }}" id="template_name">
+                    <input type="text" name="elements" id="elements" hidden>
                 </div>
                 <div class="mb-2">
                     <label class="form-label mt-3">Make ur own template here</label>
@@ -111,6 +111,30 @@
     let undoStack = [];
     let redoStack = [];
     let isLoading = false;
+
+    function loadTemplate(jsonData) {
+        try {
+            // Jika jsonData adalah string, parse dulu
+            if (typeof jsonData === 'string') {
+                jsonData = JSON.parse(jsonData);
+            }
+
+            canvas.loadFromJSON(jsonData, function() {
+                canvas.renderAll();
+                console.log('Canvas loaded successfully');
+
+                // Cek objek yang sudah diload
+                console.log('Objects on canvas:', canvas.getObjects());
+            }, function(o, object) {
+                console.log('Error loading:', o, object);
+            });
+        } catch (error) {
+            console.error('Error loading template:', error);
+        }
+    }
+
+    const savedJSON = @json($ctemplate->elements);
+    loadTemplate(savedJSON);
 
     function saveState() {
         if (isLoading) return;

@@ -47,7 +47,7 @@ class AdminCtemplateController extends Controller
         $ctemplate->elements = json_encode($request->elements);
         $ctemplate->save();
 
-        return redirect('/admin/ctemplate');
+        return redirect()->back()->with('storeSuccess', 'Success, Template has been stored! Make another?');
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\AdminMakeTokenController;
 use App\Http\Controllers\admin\AdminReceiverController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\AuthController;
+use App\Models\Ctemplates;
 use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Http\Request;
 // use GuzzleHttp\Psr7\Request;
@@ -44,4 +45,8 @@ Route::get('/downlaod-certificate-zip/{id}', [AdminCertificateController::class,
 
 Route::get('/canvas-editor', function () {
     return view('canvas-editor');
+});
+
+Route::get('/canvas-editor-edit/{id}', function ($id) {
+    return view('canvas-editor-edit', ['ctemplate' => Ctemplates::find($id)]);
 });
