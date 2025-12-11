@@ -36,3 +36,7 @@ Route::post('/admin/certificate/save', [AdminCertificateController::class, 'save
 Route::get('/admin/certificate/detail/{id}', [AdminCertificateController::class, 'zipDetails']);
 Route::get('/download-certificate/{id}', [AdminCertificateController::class, 'downlaodCertificate']);
 Route::get('/downlaod-certificate-zip/{id}', [AdminCertificateController::class, 'downloadZip']);
+
+Route::get('/canvas-editor', function () {
+    return view('canvas-editor');
+});
