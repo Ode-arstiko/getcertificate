@@ -89,7 +89,7 @@ class AdminCtemplateController extends Controller
         ];
 
         $ctemplate->update($data);
-        return redirect()->back();
+        return redirect()->back()->with('updateSuccess', 'Template has been updated!');
     }
 
     /**

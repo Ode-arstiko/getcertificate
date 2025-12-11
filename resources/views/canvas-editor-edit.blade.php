@@ -3,13 +3,14 @@
     <h5 class="card-title fw-semibold mb-4"></h5>
     <div class="card">
         <div class="card-body">
-            @if (session('storeSuccess'))
+            @if (session('updateSuccess'))
                 <div class="bg-success text-white px-2 py-1 mb-3 rounded">
-                    <i class="ti ti-check me-2"></i>{{ session('storeSuccess') }}
+                    <i class="ti ti-check me-2"></i>{{ session('updateSuccess') }}
                 </div>
             @endif
-            <form action="/admin/ctemplate/store" method="POST" id="form">
+            <form action="/admin/ctemplate/update/{{ encrypt($ctemplate->id) }}" method="POST" id="form">
                 @csrf
+                @method('put')
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Certificate Name</label>
                     <input type="text" name="template_name" class="form-control" value="{{ $ctemplate->template_name }}" id="template_name">
@@ -94,7 +95,7 @@
                     <canvas class="border border-1 border-dark rounded shadow-sm" id="c" height="595"
                         width="842"></canvas>
                     <button type="button" onclick="saveTemplate()"
-                        class="btn btn-primary shadow mt-3">Create</button>
+                        class="btn btn-primary shadow mt-3">Update</button>
                 </div>
             </form>
         </div>
