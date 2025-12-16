@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\AdminDashboardController;
 use App\Http\Controllers\admin\AdminMakeTokenController;
 use App\Http\Controllers\admin\AdminReceiverController;
 use App\Http\Controllers\admin\AdminUserController;
+use App\Http\Controllers\api\CertificateController;
 use App\Http\Controllers\AuthController;
 use App\Models\Ctemplates;
 use Barryvdh\DomPDF\Facade\PDF;
@@ -50,3 +51,5 @@ Route::get('/canvas-editor', function () {
 Route::get('/canvas-editor-edit/{id}', function ($id) {
     return view('canvas-editor-edit', ['ctemplate' => Ctemplates::find($id)]);
 });
+
+Route::post('/certificates/save-image', [CertificateController::class, 'saveCertificateCanvas']);

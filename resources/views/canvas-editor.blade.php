@@ -23,13 +23,13 @@
                             class="ti ti-plus me-2"></i>Add text</button>
 
                     <input type="file" onchange="uploadImage(event)" name="" class="hidden-file"
-                        id="imgUpload" hidden>
+                        id="imgUpload" accept=".jpg,.jpeg,.png" hidden>
                     <button type="button" id="uploadButton" class="btn btn-primary me-2"><i
                             class="ti ti-plus me-2"></i>Add
                         image</button>
 
                     <input type="file" onchange="changeBackground(event)" class="hidden-bg" name=""
-                        id="bgUpload" hidden>
+                        id="bgUpload" accept=".jpg,.jpeg,.png" hidden>
                     <button type="button" id="bgButton" class="btn btn-primary"><i
                             class="ti ti-refresh me-2"></i>Change
                         background</button>
