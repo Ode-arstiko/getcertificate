@@ -22,4 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
-/generator
+/generator/json
+/generator/node_modules
+/generator/package-lock.json
+/generator/package.json

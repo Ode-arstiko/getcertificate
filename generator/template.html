@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+</head>
+
+<body>
+
+    <canvas id="c" width="1600" height="1131"></canvas>
+
+    <script>
+        const canvas = new fabric.Canvas('c');
+
+        let data = __JSON_DATA__;
+
+        canvas.loadFromJSON(data, () => {
+            canvas.renderAll();
+            window._DONE = true; // PENTING!
+        });
+    </script>
+
+</body>
+
+</html>

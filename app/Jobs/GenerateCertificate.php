@@ -43,13 +43,13 @@ class GenerateCertificate implements ShouldQueue
 
             if (!isset($json['objects'])) {
                 abort(500, 'FORMAT JSON TEMPLATE TIDAK VALID');
-            }
+            }        
 
             // replace placeholder
             foreach ($json['objects'] as &$obj) {
                 if (!empty($obj['text'])) {
                     $obj['text'] = str_replace('{nama}', $nama, $obj['text']);
-                    $obj['text'] = str_replace('{juara}', $juaras[$i] ?? '', $obj['text']);
+                    $obj['text'] = str_replace('{juara}', $this->juaras[$i] ?? '', $obj['text']);
                 }
             }
 
@@ -86,7 +86,7 @@ HTML;
             // output pdf
             $pdfName = str_replace(' ', '-', $this->certificateName)
                 . '-' . str_replace(' ', '-', $nama)
-                . '-' . time() . '.pdf';
+                . '-' . time() . $i . '.pdf';
 
             $pdfPath = public_path('pdf/' . $pdfName);
 
