@@ -4,16 +4,19 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Certificates;
+use App\Models\Ctemplates;
 use App\Models\Zips;
 use Illuminate\Http\Request;
 
 class CertificateController extends Controller
 {
     public function index() {
-        $zip = Zips::latest()->get();
+        $zips = Zips::latest()->get();
+        $template = Ctemplates::latest()->get();
 
         return response()->json([
-            'zip' => $zip
+            'template' => $template,
+            'zips' => $zips
         ]);
     }
 

@@ -12,6 +12,6 @@ Route::get('/produk', function () {
 Route::get('/ctemplates', [CtemplateController::class, 'index'])->middleware('api.auth');
 Route::delete('/ctemplates/delete/{id}', [CtemplateController::class, 'delete'])->middleware('api.auth');
 
-Route::get('/certificates', [CertificateController::class, 'index']);
+Route::get('/certificates', [CertificateController::class, 'index'])->middleware('api.auth');
 Route::get('/certificates/{id}', [CertificateController::class, 'zipDetails']);
 Route::delete('/certificates/delete/{id}', [CertificateController::class, 'delete']);
