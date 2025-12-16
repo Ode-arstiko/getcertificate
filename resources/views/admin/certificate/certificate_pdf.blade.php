@@ -2,17 +2,12 @@
 <html>
 <head>
     <style>
-        @page { margin: 0; }
-        body { margin: 0; padding: 0; }
-        img {
-            width: 100%;
-            height: auto;
-            object-fit: cover; /* benar-benar fullscreen */
-            display: block;
-        }
+        @page { size: A4 landscape; margin: 0; }
+        body { margin:0; }
+        img { width:100%; height:auto; }
     </style>
 </head>
 <body>
-    <img src="{{ public_path($image) }}">
+    <img src="data:image/png;base64,{{ $imageBase64 }}">
 </body>
 </html>
