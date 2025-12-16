@@ -14,5 +14,8 @@ Route::post('/certificates/store', [CertificateController::class, 'store'])->mid
 Route::post('/certificates/render', [CertificateController::class, 'renderForPuppeteer']);
 Route::post('/certificates/save-puppeteer', [CertificateController::class, 'saveCertificatePuppeteer']);
 Route::delete('/certificates/delete/{id}', [CertificateController::class, 'delete']);
+Route::get('/certificates/download-zip/{id}', [CertificateController::class, 'downloadZip']);
+Route::get('/certificates/{id}', [CertificateController::class, 'zipDetails']);
+Route::get('/certificates/download/{id}', [CertificateController::class, 'downloadCertificate']);
 
 Route::post('/certificates/save-image', [CertificateController::class, 'saveCertificateCanvas']);
