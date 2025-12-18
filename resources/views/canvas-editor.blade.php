@@ -4,9 +4,9 @@
     <div class="card">
         <div class="card-body">
             {{-- @if ($storeSuccess)
-                <div class="bg-success text-white px-2 py-1 mb-3 rounded">
-                    <i class="ti ti-check me-2"></i>{{ $storeSuccess }}
-                </div>
+            <div class="bg-success text-white px-2 py-1 mb-3 rounded">
+                <i class="ti ti-check me-2"></i>{{ $storeSuccess }}
+            </div>
             @endif --}}
             <form id="form">
                 <div class="mb-3">
@@ -21,23 +21,22 @@
                     <button type="button" class="btn btn-primary me-2" onclick="addNewText()"><i
                             class="ti ti-plus me-2"></i>Add text</button>
 
-                    <input type="file" onchange="uploadImage(event)" name="" class="hidden-file"
-                        id="imgUpload" accept=".jpg,.jpeg,.png" hidden>
+                    <input type="file" onchange="uploadImage(event)" name="" class="hidden-file" id="imgUpload"
+                        accept=".jpg,.jpeg,.png" hidden>
                     <button type="button" id="uploadButton" class="btn btn-primary me-2"><i
                             class="ti ti-plus me-2"></i>Add
                         image</button>
 
-                    <input type="file" onchange="changeBackground(event)" class="hidden-bg" name=""
-                        id="bgUpload" accept=".jpg,.jpeg,.png" hidden>
-                    <button type="button" id="bgButton" class="btn btn-primary"><i
-                            class="ti ti-refresh me-2"></i>Change
+                    <input type="file" onchange="changeBackground(event)" class="hidden-bg" name="" id="bgUpload"
+                        accept=".jpg,.jpeg,.png" hidden>
+                    <button type="button" id="bgButton" class="btn btn-primary"><i class="ti ti-refresh me-2"></i>Change
                         background</button>
                 </div>
                 <div class="mb-2 d-flex justify-between">
                     <div class="me-4">
                         <label for="" class="">Font Size</label>
-                        <select name="" class="form-control" style="width: 100px;"
-                            onchange="changeFontSize(this.value)" id="fontSizeSelect">
+                        <select name="" class="form-control" style="width: 100px;" onchange="changeFontSize(this.value)"
+                            id="fontSizeSelect">
                             <option id="8" value="8">8</option>
                             <option id="10" value="10">10</option>
                             <option id="12" value="12">12</option>
@@ -79,8 +78,7 @@
                             <button type="button" onclick="fontBold()" class="btn btn-primary"><b>B</b></button>
                             <button type="button" onclick="fontItalic()" class="btn btn-primary"><i
                                     style="font-family: monospace;">I</i></button>
-                            <button type="button" onclick="fontUnderline()"
-                                class="btn btn-primary"><u>U</u></button>
+                            <button type="button" onclick="fontUnderline()" class="btn btn-primary"><u>U</u></button>
                         </div>
                     </div>
                     <div>
@@ -92,8 +90,7 @@
                 <div class="mb-3">
                     <canvas class="border border-1 border-dark rounded shadow-sm" id="c" height="595"
                         width="842"></canvas>
-                    <button type="button" onclick="saveTemplate()"
-                        class="btn btn-primary shadow mt-3">Create</button>
+                    <button type="button" onclick="saveTemplate()" class="btn btn-primary shadow mt-3">Create</button>
                 </div>
             </form>
         </div>
@@ -148,27 +145,27 @@
         });
     }
 
-    canvas.on('object:added', function() {
+    canvas.on('object:added', function () {
         // if (!even.target._restoreState) return;
         saveState();
     });
 
-    canvas.on('object:modified', function() {
+    canvas.on('object:modified', function () {
         saveState();
     });
 
-    canvas.on('object:removed', function() {
+    canvas.on('object:removed', function () {
         saveState();
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.ctrlKey && e.key === 'z') {
             // console.log("UNDO BERHASIL");
             undo();
         }
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.ctrlKey && e.key === 'y') {
             // console.log("REDO BERHASIL");
             redo();
@@ -279,7 +276,7 @@
         }
     }
 
-    colorPicker.addEventListener('input', function() {
+    colorPicker.addEventListener('input', function () {
         const active = canvas.getActiveObject();
 
         if (active && active.type === 'textbox') {
@@ -306,7 +303,7 @@
         colorPicker.value = hexColor;
     }
 
-    canvas.on('selection:created', function(e) {
+    canvas.on('selection:created', function (e) {
         const selectedObj = e.selected[0];
 
         if (selectedObj && selectedObj.type === 'textbox') {
@@ -320,7 +317,7 @@
         }
     });
 
-    canvas.on('selection:updated', function(e) {
+    canvas.on('selection:updated', function (e) {
         const selectedObj = e.selected[0];
 
         if (selectedObj && selectedObj.type === 'textbox') {
@@ -334,7 +331,7 @@
         }
     });
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.keyCode === 46) {
             const active = canvas.getActiveObject();
 
@@ -345,7 +342,7 @@
         }
     })
 
-    uploadButton.addEventListener('click', function() {
+    uploadButton.addEventListener('click', function () {
         document.querySelector('.hidden-file').click();
     })
 
@@ -357,7 +354,7 @@
         const imageUrl = await uploadToServer(file);
 
         // 2. Setelah dapat URL dari server, baru tambah ke canvas
-        fabric.Image.fromURL(imageUrl, function(img) {
+        fabric.Image.fromURL(imageUrl, function (img) {
             img.set({
                 left: 100,
                 top: 100,
@@ -376,7 +373,7 @@
         e.target.value = '';
     }
 
-    bgButton.addEventListener('click', function() {
+    bgButton.addEventListener('click', function () {
         document.querySelector('.hidden-bg').click();
     })
 
@@ -389,7 +386,7 @@
             const imageUrl = await uploadToServer(file);
 
             // 2. Set background dengan URL dari server
-            fabric.Image.fromURL(imageUrl, function(img) {
+            fabric.Image.fromURL(imageUrl, function (img) {
                 // Sesuaikan ukuran gambar dengan canvas
                 img.scaleToWidth(canvas.width);
                 img.scaleToHeight(canvas.height);
@@ -405,8 +402,8 @@
 
             // Fallback: pakai base64 lokal jika upload gagal
             let reader = new FileReader();
-            reader.onload = function(f) {
-                fabric.Image.fromURL(f.target.result, function(img) {
+            reader.onload = function (f) {
+                fabric.Image.fromURL(f.target.result, function (img) {
                     img.scaleToWidth(canvas.width);
                     img.scaleToHeight(canvas.height);
                     canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
@@ -446,29 +443,42 @@
     //     document.getElementById('elements').value = canvasJSON;
     //     document.getElementById('form').submit();
     // }
-
     async function saveTemplate() {
-        const response = await fetch(`/api/ctemplate/store`, {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer {{ $token }}',
-                'Accept': 'application/json',
-                'Content-type': 'application/json',
-            },
-            credentials: 'omit',
-            body: JSON.stringify({
-                template_name: document.getElementById('template_name').value,
-                elements: canvas.toJSON()
-            })
-        });
+        try {
+            const response = await fetch('/api/ctemplate/store', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer {{ $token }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    template_name: document.getElementById('template_name').value,
+                    elements: canvas.toJSON()
+                })
+            });
 
-        const data = await response.json();
+            const text = await response.text();
 
-        if (!response.ok) {
-            console.error(data);
-            return;
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                console.error('Response bukan JSON:', text);
+                alert('Server tidak mengembalikan JSON');
+                return;
+            }
+
+            if (!response.ok) {
+                alert(data.message || 'Gagal menyimpan');
+                return;
+            }
+
+            alert(data.message);
+
+        } catch (err) {
+            alert('Error JS: ' + err.message);
+            console.error(err);
         }
-
-        console.log('Store success', data);
     }
 </script>

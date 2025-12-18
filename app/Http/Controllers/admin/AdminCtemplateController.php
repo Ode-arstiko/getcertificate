@@ -40,18 +40,41 @@ class AdminCtemplateController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'template_name' => 'required',
-            'elements' => 'required'
-        ]);
+        try {
+            $request->validate([
+                'template_name' => 'required|string',
+                'elements' => 'required'
+            ]);
 
-        $ctemplate = new Ctemplates();
-        $ctemplate->template_name = $request->template_name;
-        $ctemplate->elements = json_encode($request->elements);
-        $ctemplate->save();
+            $token = $request->bearerToken();
+            if (!$token) {
+                return response()->json(['message' => 'Token tidak ditemukan'], 401);
+            }
 
-        return redirect()->back()->with('storeSuccess', 'Template has been stored!');
+            $payload = JWT::decode($token, new Key(config('jwt.secret'), 'HS256'));
+
+            if ($payload->type !== 'iframe') {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+
+            Ctemplates::create([
+                'template_name' => $request->template_name,
+                'elements' => json_encode($request->elements)
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Template berhasil disimpan'
+            ], 201);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan template',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.

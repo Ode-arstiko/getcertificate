@@ -13,18 +13,27 @@ class CtemplateController extends Controller
 {
     public function index()
     {
-        $ctemplates = Ctemplates::latest()->get();
-
-        return response()->json($ctemplates);
+        return response()->json(
+            Ctemplates::latest()->get()
+        );
     }
 
     public function delete($id)
     {
-        $where = Ctemplates::find(($id));
-        $where->delete();
+        $ctemplate = Ctemplates::find($id);
+
+        if (!$ctemplate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Template not found'
+            ], 404);
+        }
+
+        $ctemplate->delete();
 
         return response()->json([
             'success' => true,
+            'message' => 'Template deleted'
         ]);
     }
 
@@ -39,19 +48,22 @@ class CtemplateController extends Controller
         $payload = JWT::decode($token, new Key(config('jwt.secret'), 'HS256'));
 
         if ($payload->type !== 'iframe') {
-            abort(403);
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $data = [
+        return view('canvas-editor', [
             'token' => $token
-        ];
-
-        return view('canvas-editor', $data);
+        ]);
     }
 
     public function edit(Request $request, $id)
     {
         $ctemplate = Ctemplates::find($id);
+
+        if (!$ctemplate) {
+            abort(404);
+        }
+
         $token = $request->query('token');
 
         if (!$token) {
@@ -61,17 +73,40 @@ class CtemplateController extends Controller
         $payload = JWT::decode($token, new Key(config('jwt.secret'), 'HS256'));
 
         if ($payload->type !== 'iframe') {
-            abort(403);
+            return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        $data = [
+        return view('canvas-editor-edit', [
             'token' => $token,
             'ctemplate' => $ctemplate
-        ];
-
-        return view('canvas-editor-edit', $data);
+        ]);
     }
 
+    /**
+     * STORE TEMPLATE (INI YANG DIPANGGIL FETCH)
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'template_name' => 'required',
+            'elements' => 'required'
+        ]);
+
+        $ctemplate = Ctemplates::create([
+            'template_name' => $request->template_name,
+            'elements' => json_encode($request->elements)
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Template has been stored!',
+            'data' => $ctemplate
+        ], 201);
+    }
+
+    /**
+     * UPDATE TEMPLATE
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -80,12 +115,22 @@ class CtemplateController extends Controller
         ]);
 
         $ctemplate = Ctemplates::find($id);
-        $data = [
+
+        if (!$ctemplate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Template not found'
+            ], 404);
+        }
+
+        $ctemplate->update([
             'template_name' => $request->template_name,
             'elements' => json_encode($request->elements)
-        ];
+        ]);
 
-        $ctemplate->update($data);
-        return redirect()->back()->with('updateSuccess', 'Template has been updated!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Template has been updated!'
+        ]);
     }
 }
