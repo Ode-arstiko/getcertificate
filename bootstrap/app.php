@@ -17,8 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\AllowIframe::class,
         ]);
         $middleware->alias([
-            'app.token' => \App\Http\Middleware\ApiAuth::class,
-            'jwt.cookie' => \App\Http\Middleware\JwtFromCookie::class,
+            'app.token' => \App\Http\Middleware\AppTokenMiddleware::class,
+            'iframe.jwt' => \App\Http\Middleware\IframeJwtMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

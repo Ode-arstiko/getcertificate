@@ -26,3 +26,6 @@ Thumbs.db
 /generator/node_modules
 /generator/package-lock.json
 /generator/package.json
+/public/images
+/public/pdf
+/public/template

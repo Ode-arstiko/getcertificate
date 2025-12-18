@@ -4,7 +4,10 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ctemplates;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class AdminCtemplateController extends Controller
 {
@@ -47,7 +50,7 @@ class AdminCtemplateController extends Controller
         $ctemplate->elements = json_encode($request->elements);
         $ctemplate->save();
 
-        return redirect()->back()->with('storeSuccess', 'Success, Template has been stored! Make another?');
+        return redirect()->back()->with('storeSuccess', 'Template has been stored!');
     }
 
     /**
