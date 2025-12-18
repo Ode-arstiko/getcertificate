@@ -20,7 +20,3 @@ Route::get('/certificates/download-zip/{id}', [CertificateController::class, 'do
 Route::get('/certificates/download/{id}', [CertificateController::class, 'downloadCertificate'])->middleware('app.token');
 
 Route::post('/certificates/save-image', [CertificateController::class, 'saveCertificateCanvas']);
-
-Route::middleware('jwt.cookie', 'auth:api', 'app.token')->group(function() {
-    Route::get('/certificates', [CertificateController::class, 'index']);
-});
