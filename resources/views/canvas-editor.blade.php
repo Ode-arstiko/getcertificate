@@ -3,16 +3,15 @@
     <h5 class="card-title fw-semibold mb-4"></h5>
     <div class="card">
         <div class="card-body">
-            @if (session('storeSuccess'))
+            {{-- @if ($storeSuccess)
                 <div class="bg-success text-white px-2 py-1 mb-3 rounded">
-                    <i class="ti ti-check me-2"></i>{{ session('storeSuccess') }}
+                    <i class="ti ti-check me-2"></i>{{ $storeSuccess }}
                 </div>
-            @endif
-            <form action="/admin/ctemplate/store" method="POST" id="form">
-                @csrf
+            @endif --}}
+            <form id="form">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Certificate Name</label>
-                    <input type="text" name="template_name" class="form-control" id="template_name">
+                    <input type="text" name="template_name" class="form-control" id="template_name" required>
                     <input type="text" name="elements" id="elements" value="" hidden>
                 </div>
                 <div class="mb-2">
@@ -424,13 +423,12 @@
     async function uploadToServer(file) {
         const formData = new FormData();
         formData.append('image', file);
-        formData.append('_token', '{{ csrf_token() }}');
+        // formData.append('_token', '{{ csrf_token() }}');
 
-        const response = await fetch('/upload-image', {
+        const response = await fetch('/api/upload-image', {
             method: 'POST',
-            credentials: "include",
             headers: {
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                'Authorization': 'Bearer {{ $token }}'
             },
             body: formData
         });
@@ -443,10 +441,34 @@
         return result.url; // URL ke gambar di server
     }
 
-    function saveTemplate() {
-        // Sekarang canvas sudah pakai URL, bukan base64
-        const canvasJSON = JSON.stringify(canvas.toJSON());
-        document.getElementById('elements').value = canvasJSON;
-        document.getElementById('form').submit();
+    // function saveTemplate() {
+    //     const canvasJSON = JSON.stringify(canvas.toJSON());
+    //     document.getElementById('elements').value = canvasJSON;
+    //     document.getElementById('form').submit();
+    // }
+
+    async function saveTemplate() {
+        const response = await fetch(`/api/ctemplate/store`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer {{ $token }}',
+                'Accept': 'application/json',
+                'Content-type': 'application/json',
+            },
+            credentials: 'omit',
+            body: JSON.stringify({
+                template_name: document.getElementById('template_name').value,
+                elements: canvas.toJSON()
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error(data);
+            return;
+        }
+
+        console.log('Store success', data);
     }
 </script>

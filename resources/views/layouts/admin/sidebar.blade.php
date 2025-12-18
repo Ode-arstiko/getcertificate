@@ -41,11 +41,11 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/admin/make-token" aria-expanded="false">
+                        <a class="sidebar-link" href="/admin/clients-app" aria-expanded="false">
                             <span>
-                                <i class="ti ti-api"></i>
+                                <i class="ti ti-user"></i>
                             </span>
-                            <span class="hide-menu">Api Token</span>
+                            <span class="hide-menu">Clients App</span>
                         </a>
                     </li>
                     <li class="sidebar-item">

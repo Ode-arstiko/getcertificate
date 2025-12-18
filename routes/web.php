@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\AdminAppClientsController;
 use App\Http\Controllers\admin\AdminCertificateController;
 use App\Http\Controllers\admin\AdminCtemplateController;
 use App\Http\Controllers\admin\AdminDashboardController;
@@ -7,6 +8,8 @@ use App\Http\Controllers\admin\AdminMakeTokenController;
 use App\Http\Controllers\admin\AdminReceiverController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\api\CertificateController;
+use App\Http\Controllers\api\CtemplateController;
+use App\Http\Controllers\api\GetTokenController;
 use App\Http\Controllers\AuthController;
 use App\Models\Ctemplates;
 use Barryvdh\DomPDF\Facade\PDF;
@@ -22,9 +25,9 @@ Route::post('/admin/user/store', [AdminUserController::class, 'store'])->name('a
 Route::delete('/admin/user/delete/{id}', [AdminUserController::class, 'destroy'])->name('admin.user.delete');
 Route::put('/admin/user/update/{id}', [AdminUserController::class, 'update'])->name('admin.user.update');
 
-Route::get('/admin/make-token', [AdminMakeTokenController::class, 'index']);
-Route::post('/admin/make-token/store', [AdminMakeTokenController::class, 'store']);
-Route::delete('/admin/make-token/delete/{id}', [AdminMakeTokenController::class, 'delete']);
+Route::get('/admin/clients-app', [AdminAppClientsController::class, 'index']);
+Route::post('/admin/clients-app/store', [AdminAppClientsController::class, 'store']);
+Route::delete('/admin/clients-app/delete/{id}', [AdminAppClientsController::class, 'delete']);
 
 Route::get('/admin/receiver', [AdminReceiverController::class, 'index']);
 
@@ -44,12 +47,8 @@ Route::get('/admin/certificate/detail/{id}', [AdminCertificateController::class,
 Route::get('/download-certificate/{id}', [AdminCertificateController::class, 'downlaodCertificate']);
 Route::get('/downlaod-certificate-zip/{id}', [AdminCertificateController::class, 'downloadZip']);
 
-Route::get('/canvas-editor', function () {
-    return view('canvas-editor');
-});
+Route::get('/canvas-editor', [CtemplateController::class, 'create']);
 
-Route::get('/canvas-editor-edit/{id}', function ($id) {
-    return view('canvas-editor-edit', ['ctemplate' => Ctemplates::find($id)]);
-});
+Route::get('/canvas-editor-edit/{id}', [CtemplateController::class, 'edit']);
 
 Route::post('/certificates/save-image', [CertificateController::class, 'saveCertificateCanvas']);
