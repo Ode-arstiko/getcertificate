@@ -70,7 +70,25 @@ body {
     margin: 0;
 }
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Great+Vibes&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2
+?family=Montserrat:wght@400;600;700;800;900
+&family=Great+Vibes
+&family=Playfair+Display:wght@400;700
+&family=Libre+Baskerville:wght@400;700
+&family=Cormorant+Garamond:wght@400;700
+&family=Merriweather:wght@400;700
+&family=Allura
+&family=Alex+Brush
+&family=Pacifico
+&family=Lato:wght@400;700
+&family=Poppins:wght@400;700
+&family=Raleway:wght@400;700
+&family=Open+Sans:wght@400;700
+&display=swap"
+rel="stylesheet">
 </head>
 <body>
 $body

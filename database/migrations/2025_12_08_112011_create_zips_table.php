@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('zips', function (Blueprint $table) {
             $table->id();
             $table->string('zip_name');
+            $table->string('client_id')->nullable();
             $table->timestamps();
         });
     }

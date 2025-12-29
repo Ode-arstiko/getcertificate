@@ -56,9 +56,20 @@
                         <label for="" class="">Font Family</label>
                         <select name="" class="form-control" style="width: 150px;"
                             onchange="changeFontFamily(this.value)" id="fontFamilySelect">
-                            <option value="Sans-serif" id="sansserif">Sans Serif</option>
-                            <option value="Montserrat" id="montserrat">Montserrat</option>
-                            <option value="Great Vibes" id="greatvibes">Great Vibes</option>
+                            <option value="Sans-serif">Sans Serif</option>
+                            <option value="Playfair Display">Playfair Dislpay</option>
+                            <option value="Libre Baskerville">Libre Baskerville</option>
+                            <option value="Cormorant Garamond">Cormorant Garamond</option>
+                            <option value="Merriweather">Merriweather</option>
+                            <option value="Montserrat">Montserrat</option>
+                            <option value="Lato">Lato</option>
+                            <option value="Poppins">Poppins</option>
+                            <option value="Raleway">Raleway</option>
+                            <option value="Open Sans">Open Sans</option>
+                            <option value="Great Vibes">Great Vibes</option>
+                            <option value="Allura">Allura</option>
+                            <option value="Alex Brush">Alex Brush</option>
+                            <option value="Pacifico">Pacifico</option>
                         </select>
                     </div>
                     <div class="me-4">

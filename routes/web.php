@@ -29,8 +29,6 @@ Route::get('/admin/clients-app', [AdminAppClientsController::class, 'index']);
 Route::post('/admin/clients-app/store', [AdminAppClientsController::class, 'store']);
 Route::delete('/admin/clients-app/delete/{id}', [AdminAppClientsController::class, 'delete']);
 
-Route::get('/admin/receiver', [AdminReceiverController::class, 'index']);
-
 Route::get('/admin/ctemplate', [AdminCtemplateController::class, 'index']);
 Route::get('/admin/ctemplate/create', [AdminCtemplateController::class, 'create']);
 Route::post('/admin/ctemplate/store', [AdminCtemplateController::class, 'store']);

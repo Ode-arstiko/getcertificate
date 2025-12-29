@@ -14,10 +14,10 @@ use ZipArchive;
 
 class CertificateController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $zip = Zips::latest()->get();
-        $template = Ctemplates::latest()->get();
+        $template = Ctemplates::where('client_id', $request->get('app_id'))->latest()->get();
 
         return response()->json([
             'zips' => $zip,
@@ -45,7 +45,8 @@ class CertificateController extends Controller
 
         // zip
         $zip = Zips::create([
-            'zip_name' => $certificateName . '-' . date('Y-m-d')
+            'zip_name' => $certificateName . '-' . date('Y-m-d'),
+            'client_id' => $request->get('app_id')
         ]);
 
         // folder html

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ctemplates', function (Blueprint $table) {
             $table->id();
             $table->string('template_name');
+            $table->string('client_id')->nullable();
             $table->longText('elements');
             $table->timestamps();
         });

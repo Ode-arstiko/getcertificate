@@ -14,7 +14,7 @@ Route::post('/get-token', [GetTokenController::class, 'getToken']);
 Route::post('/get-temp-token', [GetTokenController::class, 'getTempToken']);
 
 Route::get('/ctemplates', [CtemplateController::class, 'index'])->middleware('app.token');
-Route::post('/ctemplate/store', [AdminCtemplateController::class, 'store'])->middleware('iframe.jwt');
+Route::post('/ctemplate/store', [CtemplateController::class, 'store'])->middleware('iframe.jwt');
 Route::put('/ctemplate/update/{id}', [CtemplateController::class, 'update'])->middleware('iframe.jwt');
 Route::delete('/ctemplates/delete/{id}', [CtemplateController::class, 'delete'])->middleware('app.token');
 

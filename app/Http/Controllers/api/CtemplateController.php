@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Session;
 
 class CtemplateController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $app_id = $request->get('app_id');
         return response()->json(
-            Ctemplates::latest()->get()
+            Ctemplates::where('client_id', $app_id)->latest()->get()
         );
     }
 
@@ -82,19 +83,18 @@ class CtemplateController extends Controller
         ]);
     }
 
-    /**
-     * STORE TEMPLATE (INI YANG DIPANGGIL FETCH)
-     */
     public function store(Request $request)
     {
         $request->validate([
             'template_name' => 'required',
-            'elements' => 'required'
+            'elements' => 'required',
+            'app_id' => 'required'
         ]);
 
         $ctemplate = Ctemplates::create([
             'template_name' => $request->template_name,
-            'elements' => json_encode($request->elements)
+            'elements' => json_encode($request->elements),
+            'client_id' => $request->app_id
         ]);
 
         return response()->json([
@@ -104,9 +104,6 @@ class CtemplateController extends Controller
         ], 201);
     }
 
-    /**
-     * UPDATE TEMPLATE
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
