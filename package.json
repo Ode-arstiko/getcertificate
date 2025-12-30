@@ -3,7 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "start": "node server.js"
+        "build": "vite build",
+        "dev": "vite"
     },
     "devDependencies": {
         "axios": "^1.11.0"
