@@ -435,7 +435,7 @@
         const supabaseUrl = "https://simhjkvtmmsdnkinsmun.supabase.co";
         const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbWhqa3Z0bW1zZG5raW5zbXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNjk0MDksImV4cCI6MjA4MjY0NTQwOX0.krHd1NnF325CMf-JfYc4oI1XArYTh3nSpWEcRiuxc2M";
 
-        const fileName = Date.now() + "-" + file.name;
+        const fileName = Date.now();
         const uploadUrl =
             `${supabaseUrl}/storage/v1/object/images/${fileName}`;
 
