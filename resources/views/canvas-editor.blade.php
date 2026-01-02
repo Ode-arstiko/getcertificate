@@ -111,13 +111,6 @@
     </div>
 </div>
 
-<script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-    const supabaseUrl = "https://simhjkvtmmsdnkinsmun.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbWhqa3Z0bW1zZG5raW5zbXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNjk0MDksImV4cCI6MjA4MjY0NTQwOX0.krHd1NnF325CMf-JfYc4oI1XArYTh3nSpWEcRiuxc2M";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-</script>
 <script>
     const canvas = new fabric.Canvas('c');
     const colorPicker = document.getElementById('colorPicker');
@@ -439,40 +432,29 @@
 
     // Fungsi upload ke server
     async function uploadToServer(file) {
-        if (!file) throw new Error("File tidak ada");
+        const supabaseUrl = "https://simhjkvtmmsdnkinsmun.supabase.co";
+        const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbWhqa3Z0bW1zZG5raW5zbXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNjk0MDksImV4cCI6MjA4MjY0NTQwOX0.krHd1NnF325CMf-JfYc4oI1XArYTh3nSpWEcRiuxc2M";
 
-        // optional: validasi
-        // if (!file.type.startsWith('image/')) {
-        //     throw new Error("File harus gambar");
-        // }
+        const fileName = Date.now() + "-" + file.name;
+        const uploadUrl =
+            `${supabaseUrl}/storage/v1/object/images/${fileName}`;
 
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `${fileName}`;
+        const res = await fetch(uploadUrl, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${anonKey}`,
+                "apikey": anonKey,
+                "Content-Type": file.type
+            },
+            body: file
+        });
 
-        const {
-            error
-        } = await supabase
-            .storage
-            .from('images') // nama bucket
-            .upload(filePath, file, {
-                cacheControl: '3600',
-                upsert: false
-            });
-
-        if (error) {
-            console.error(error);
-            throw new Error("Upload ke Supabase gagal");
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error("Upload gagal: " + text);
         }
 
-        const {
-            data
-        } = supabase
-            .storage
-            .from('images')
-            .getPublicUrl(filePath);
-
-        return data.publicUrl;
+        return `${supabaseUrl}/storage/v1/object/public/images/${fileName}`;
     }
 
     // function saveTemplate() {
