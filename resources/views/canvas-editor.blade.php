@@ -21,23 +21,22 @@
                     <button type="button" class="btn btn-primary me-2" onclick="addNewText()"><i
                             class="ti ti-plus me-2"></i>Add text</button>
 
-                    <input type="file" onchange="uploadImage(event)" name="" class="hidden-file"
-                        id="imgUpload" accept=".jpg,.jpeg,.png" hidden>
+                    <input type="file" onchange="uploadImage(event)" name="" class="hidden-file" id="imgUpload"
+                        accept=".jpg,.jpeg,.png" hidden>
                     <button type="button" id="uploadButton" class="btn btn-primary me-2"><i
                             class="ti ti-plus me-2"></i>Add
                         image</button>
 
-                    <input type="file" onchange="changeBackground(event)" class="hidden-bg" name=""
-                        id="bgUpload" accept=".jpg,.jpeg,.png" hidden>
-                    <button type="button" id="bgButton" class="btn btn-primary"><i
-                            class="ti ti-refresh me-2"></i>Change
+                    <input type="file" onchange="changeBackground(event)" class="hidden-bg" name="" id="bgUpload"
+                        accept=".jpg,.jpeg,.png" hidden>
+                    <button type="button" id="bgButton" class="btn btn-primary"><i class="ti ti-refresh me-2"></i>Change
                         background</button>
                 </div>
                 <div class="mb-2 d-flex justify-between">
                     <div class="me-4">
                         <label for="" class="">Font Size</label>
-                        <select name="" class="form-control" style="width: 100px;"
-                            onchange="changeFontSize(this.value)" id="fontSizeSelect">
+                        <select name="" class="form-control" style="width: 100px;" onchange="changeFontSize(this.value)"
+                            id="fontSizeSelect">
                             <option id="8" value="8">8</option>
                             <option id="10" value="10">10</option>
                             <option id="12" value="12">12</option>
@@ -90,8 +89,7 @@
                             <button type="button" onclick="fontBold()" class="btn btn-primary"><b>B</b></button>
                             <button type="button" onclick="fontItalic()" class="btn btn-primary"><i
                                     style="font-family: monospace;">I</i></button>
-                            <button type="button" onclick="fontUnderline()"
-                                class="btn btn-primary"><u>U</u></button>
+                            <button type="button" onclick="fontUnderline()" class="btn btn-primary"><u>U</u></button>
                         </div>
                     </div>
                     <div>
@@ -103,21 +101,14 @@
                 <div class="mb-3">
                     <canvas class="border border-1 border-dark rounded shadow-sm" id="c" height="595"
                         width="842"></canvas>
-                    <button type="button" onclick="saveTemplate()"
-                        class="btn btn-primary shadow mt-3">Create</button>
+                    <button type="button" onclick="saveTemplate()" class="btn btn-primary shadow mt-3">Create</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-{{-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> --}}
 <script>
-    const supabaseUrl = "https://abcd1234.supabase.co";
-    const supabaseKey = "ANON_PUBLIC_KEY_KAMU";
-
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
     const canvas = new fabric.Canvas('c');
     const colorPicker = document.getElementById('colorPicker');
     const uploadButton = document.getElementById('uploadButton');
@@ -165,27 +156,27 @@
         });
     }
 
-    canvas.on('object:added', function() {
+    canvas.on('object:added', function () {
         // if (!even.target._restoreState) return;
         saveState();
     });
 
-    canvas.on('object:modified', function() {
+    canvas.on('object:modified', function () {
         saveState();
     });
 
-    canvas.on('object:removed', function() {
+    canvas.on('object:removed', function () {
         saveState();
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.ctrlKey && e.key === 'z') {
             // console.log("UNDO BERHASIL");
             undo();
         }
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.ctrlKey && e.key === 'y') {
             // console.log("REDO BERHASIL");
             redo();
@@ -296,7 +287,7 @@
         }
     }
 
-    colorPicker.addEventListener('input', function() {
+    colorPicker.addEventListener('input', function () {
         const active = canvas.getActiveObject();
 
         if (active && active.type === 'textbox') {
@@ -323,7 +314,7 @@
         colorPicker.value = hexColor;
     }
 
-    canvas.on('selection:created', function(e) {
+    canvas.on('selection:created', function (e) {
         const selectedObj = e.selected[0];
 
         if (selectedObj && selectedObj.type === 'textbox') {
@@ -337,7 +328,7 @@
         }
     });
 
-    canvas.on('selection:updated', function(e) {
+    canvas.on('selection:updated', function (e) {
         const selectedObj = e.selected[0];
 
         if (selectedObj && selectedObj.type === 'textbox') {
@@ -351,7 +342,7 @@
         }
     });
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         if (event.keyCode === 46) {
             const active = canvas.getActiveObject();
 
@@ -362,7 +353,7 @@
         }
     })
 
-    uploadButton.addEventListener('click', function() {
+    uploadButton.addEventListener('click', function () {
         document.querySelector('.hidden-file').click();
     })
 
@@ -374,7 +365,7 @@
         const imageUrl = await uploadToServer(file);
 
         // 2. Setelah dapat URL dari server, baru tambah ke canvas
-        fabric.Image.fromURL(imageUrl, function(img) {
+        fabric.Image.fromURL(imageUrl, function (img) {
             img.set({
                 left: 100,
                 top: 100,
@@ -393,7 +384,7 @@
         e.target.value = '';
     }
 
-    bgButton.addEventListener('click', function() {
+    bgButton.addEventListener('click', function () {
         document.querySelector('.hidden-bg').click();
     })
 
@@ -406,7 +397,7 @@
             const imageUrl = await uploadToServer(file);
 
             // 2. Set background dengan URL dari server
-            fabric.Image.fromURL(imageUrl, function(img) {
+            fabric.Image.fromURL(imageUrl, function (img) {
                 // Sesuaikan ukuran gambar dengan canvas
                 img.scaleToWidth(canvas.width);
                 img.scaleToHeight(canvas.height);
@@ -422,8 +413,8 @@
 
             // Fallback: pakai base64 lokal jika upload gagal
             let reader = new FileReader();
-            reader.onload = function(f) {
-                fabric.Image.fromURL(f.target.result, function(img) {
+            reader.onload = function (f) {
+                fabric.Image.fromURL(f.target.result, function (img) {
                     img.scaleToWidth(canvas.width);
                     img.scaleToHeight(canvas.height);
                     canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
@@ -438,40 +429,24 @@
 
     // Fungsi upload ke server
     async function uploadToServer(file) {
-        if (!file) throw new Error("File tidak ada");
+        const formData = new FormData();
+        formData.append('image', file);
+        // formData.append('_token', '{{ csrf_token() }}');
 
-        // optional: validasi
-        // if (!file.type.startsWith('image/')) {
-        //     throw new Error("File harus gambar");
-        // }
+        const response = await fetch('/api/upload-image', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer {{ $token }}'
+            },
+            body: formData
+        });
 
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        const {
-            error
-        } = await supabase
-            .storage
-            .from('images') // nama bucket
-            .upload(filePath, file, {
-                cacheControl: '3600',
-                upsert: false
-            });
-
-        if (error) {
-            console.error(error);
-            throw new Error("Upload ke Supabase gagal");
+        if (!response.ok) {
+            throw new Error('Upload gagal: ' + response.status);
         }
 
-        const {
-            data
-        } = supabase
-            .storage
-            .from('images')
-            .getPublicUrl(filePath);
-
-        return data.publicUrl;
+        const result = await response.json();
+        return result.url; // URL ke gambar di server
     }
 
     // function saveTemplate() {
