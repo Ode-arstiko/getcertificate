@@ -464,7 +464,7 @@
     // }
     async function saveTemplate() {
         try {
-            const response = await fetch('/api/ctemplate/store', {
+            const response = await fetch('https://getcertificate-v1.vercel.app/api/api/ctemplate/store', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer {{ $token }}',
