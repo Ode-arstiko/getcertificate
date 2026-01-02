@@ -114,6 +114,11 @@
 <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
+    const supabaseUrl = "https://simhjkvtmmsdnkinsmun.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbWhqa3Z0bW1zZG5raW5zbXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNjk0MDksImV4cCI6MjA4MjY0NTQwOX0.krHd1NnF325CMf-JfYc4oI1XArYTh3nSpWEcRiuxc2M";
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
+<script>
     const canvas = new fabric.Canvas('c');
     const colorPicker = document.getElementById('colorPicker');
     const uploadButton = document.getElementById('uploadButton');
@@ -123,11 +128,6 @@
     let undoStack = [];
     let redoStack = [];
     let isLoading = false;
-
-    const supabaseUrl = "https://simhjkvtmmsdnkinsmun.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbWhqa3Z0bW1zZG5raW5zbXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNjk0MDksImV4cCI6MjA4MjY0NTQwOX0.krHd1NnF325CMf-JfYc4oI1XArYTh3nSpWEcRiuxc2M";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
 
     function saveState() {
         if (isLoading) return;
