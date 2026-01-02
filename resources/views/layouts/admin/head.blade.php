@@ -7,7 +7,7 @@
     <link rel="shortcut icon" type="image/png" href="/template/src/assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="{{ asset('template/src/assets/css/styles.min.css') }}" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
