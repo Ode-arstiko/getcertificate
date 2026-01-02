@@ -111,7 +111,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> --}}
 <script>
     const supabaseUrl = "https://abcd1234.supabase.co";
     const supabaseKey = "ANON_PUBLIC_KEY_KAMU";
