@@ -454,24 +454,29 @@
 
     // Fungsi upload ke server
     async function uploadToServer(file) {
-        const formData = new FormData();
-        formData.append('image', file);
-        // formData.append('_token', '{{ csrf_token() }}');
+        const supabaseUrl = "https://simhjkvtmmsdnkinsmun.supabase.co";
+        const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbWhqa3Z0bW1zZG5raW5zbXVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNjk0MDksImV4cCI6MjA4MjY0NTQwOX0.krHd1NnF325CMf-JfYc4oI1XArYTh3nSpWEcRiuxc2M";
 
-        const response = await fetch('/api/upload-image', {
-            method: 'POST',
+        const fileName = Date.now();
+        const uploadUrl =
+            `${supabaseUrl}/storage/v1/object/images/${fileName}`;
+
+        const res = await fetch(uploadUrl, {
+            method: "POST",
             headers: {
-                'Authorization': 'Bearer {{ $token }}'
+                "Authorization": `Bearer ${anonKey}`,
+                "apikey": anonKey,
+                "Content-Type": file.type
             },
-            body: formData
+            body: file
         });
 
-        if (!response.ok) {
-            throw new Error('Upload gagal: ' + response.status);
+        if (!res.ok) {
+            const text = await res.text();
+            throw new Error("Upload gagal: " + text);
         }
 
-        const result = await response.json();
-        return result.url; // URL ke gambar di server
+        return `${supabaseUrl}/storage/v1/object/public/images/${fileName}`;
     }
 
     async function saveTemplate(id) {
