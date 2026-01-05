@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helpers\FabricToHtml;
 use App\Http\Controllers\Controller;
 use App\Models\Certificates;
 use App\Models\Ctemplates;
 use App\Models\Zips;
 use App\Jobs\GenerateCertificate;
+use App\Services\SupabaseStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use ZipArchive;
 
@@ -43,23 +46,97 @@ class CertificateController extends Controller
             return back()->with('error', 'Jumlah nama dan juara harus sama.');
         }
 
+        if (count($names) > 5) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Maksimal 5 data per request'
+            ], 422);
+        }
+
         // zip
         $zip = Zips::create([
             'zip_name' => $certificateName . '-' . date('Y-m-d'),
             'client_id' => $request->get('app_id')
         ]);
 
-        // folder html
-        $htmlDir = storage_path('app/html');
-        if (!File::exists($htmlDir)) {
-            File::makeDirectory($htmlDir, 0755, true);
-        }
+        foreach ($names as $i => $nama) {
 
-        GenerateCertificate::dispatch($names, $juaras, $template, $zip->id, $htmlDir, $certificateName);
+            // decode fabric json
+            $json = json_decode($template->elements, true);
+            if (is_string($json)) {
+                $json = json_decode($json, true);
+            }
+
+            if (!isset($json['objects'])) {
+                abort(500, 'FORMAT JSON TEMPLATE TIDAK VALID');
+            }
+
+            // replace placeholder
+            foreach ($json['objects'] as &$obj) {
+                if (!empty($obj['text'])) {
+                    $obj['text'] = str_replace('{nama}', $nama, $obj['text']);
+                    $obj['text'] = str_replace('{juara}', $juaras[$i] ?? '', $obj['text']);
+                }
+            }
+
+            // 🔥 render HTML dari Fabric
+            $body = FabricToHtml::render($json);
+
+            $html = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@page { size: A4 landscape; margin: 0; }
+body {
+    width: 1600px;
+    height: 1131px;
+    position: relative;
+    margin: 0;
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2
+?family=Montserrat:wght@400;600;700;800;900
+&family=Great+Vibes
+&family=Playfair+Display:wght@400;700
+&family=Libre+Baskerville:wght@400;700
+&family=Cormorant+Garamond:wght@400;700
+&family=Merriweather:wght@400;700
+&family=Allura
+&family=Alex+Brush
+&family=Pacifico
+&family=Lato:wght@400;700
+&family=Poppins:wght@400;700
+&family=Raleway:wght@400;700
+&family=Open+Sans:wght@400;700
+&display=swap"
+rel="stylesheet">
+</head>
+<body>
+$body
+</body>
+</html>
+HTML;
+
+            Http::post(env('PDF_RENDER_API'), [
+                'html' => $html,
+                'filename' => $certificateName . '-' . $nama . '.pdf',
+                'zip_id' => $zip->id
+            ]);
+
+            Certificates::create([
+                'zip_id' => $zip->id,
+                'certificate_name' => $certificateName . '-' . $nama . '.pdf',
+            ]);
+        }
 
         return response()->json([
             'success' => true,
-            'message' => 'Certificate is on process'
+            'message' => 'Certificate berhasil diproses'
         ]);
     }
 
