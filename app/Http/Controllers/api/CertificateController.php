@@ -122,7 +122,7 @@ $body
 </html>
 HTML;
 
-            Http::post(env('PDF_RENDER_API'), [
+            Http::post(env('https://getcertificate-v1.vercel.app/api/render-pdf'), [
                 'html' => $html,
                 'filename' => $certificateName . '-' . $nama . '.pdf',
                 'zip_id' => $zip->id
