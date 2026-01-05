@@ -82,48 +82,8 @@ class CertificateController extends Controller
             // 🔥 render HTML dari Fabric
             $body = FabricToHtml::render($json);
 
-            $html = <<<HTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<style>
-@page { size: A4 landscape; margin: 0; }
-body {
-    width: 1600px;
-    height: 1131px;
-    position: relative;
-    margin: 0;
-}
-</style>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2
-?family=Montserrat:wght@400;600;700;800;900
-&family=Great+Vibes
-&family=Playfair+Display:wght@400;700
-&family=Libre+Baskerville:wght@400;700
-&family=Cormorant+Garamond:wght@400;700
-&family=Merriweather:wght@400;700
-&family=Allura
-&family=Alex+Brush
-&family=Pacifico
-&family=Lato:wght@400;700
-&family=Poppins:wght@400;700
-&family=Raleway:wght@400;700
-&family=Open+Sans:wght@400;700
-&display=swap"
-rel="stylesheet">
-</head>
-<body>
-$body
-</body>
-</html>
-HTML;
-
             Http::post(env('https://getcertificate-v1.vercel.app/api/render-pdf'), [
-                'html' => $html,
+                'body' => $body,
                 'filename' => $certificateName . '-' . $nama . '.pdf',
                 'zip_id' => $zip->id
             ]);
