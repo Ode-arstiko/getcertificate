@@ -7,9 +7,6 @@ use App\Http\Controllers\api\CtemplateController;
 use App\Http\Controllers\api\GetTokenController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/logout', [AuthController::class, 'logout']);
-
 Route::post('/get-token', [GetTokenController::class, 'getToken']);
 Route::post('/get-temp-token', [GetTokenController::class, 'getTempToken']);
 

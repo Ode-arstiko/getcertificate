@@ -85,9 +85,6 @@
                             <h6 class="fw-semibold mb-0">Email</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Role</h6>
-                        </th>
-                        <th class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Actions</h6>
                         </th>
                     </tr>
@@ -103,9 +100,6 @@
                             </td>
                             <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">{{ $u->email }}</p>
-                            </td>
-                            <td class="border-bottom-0">
-                                <h6 class="mb-0 fw-normal">{{ $u->role }}</h6>
                             </td>
                             <td class="border-bottom-0">
                                 <button class="btn btn-primary mb-0 shadow" data-bs-toggle="modal"
