@@ -180,20 +180,14 @@ class CertificateController extends Controller
             ], 404);
         }
 
-        $path = public_path('pdf/' . $certificate->certificate_name);
+        $filename = $certificate->certificate_name;
 
-        if (!file_exists($path)) {
-            return response()->json([
-                'message' => 'File not found'
-            ], 404);
-        }
+        $response = Http::get('https://getcertificate-v1.vercel.app/api/download-pdf', [
+            'file' => $filename
+        ]);
 
-        return response()->download(
-            $path,
-            $certificate->certificate_name, // 🔥 nama file asli
-            [
-                'Content-Type' => 'application/pdf'
-            ]
-        );
+        return response($response->body(), 200)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
 }
