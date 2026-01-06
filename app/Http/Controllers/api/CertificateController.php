@@ -120,46 +120,44 @@ class CertificateController extends Controller
 
     public function downloadZip($id)
     {
-        // 1️⃣ ambil data sertifikat berdasarkan zip_id
-        $certificates = Certificates::where('zip_id', $id)->get();
+        // 1️⃣ ambil data sertifikat
+$certificates = Certificates::where('zip_id', $id)->get();
 
-        if ($certificates->isEmpty()) {
-            abort(404, 'Sertifikat tidak ditemukan');
-        }
+if ($certificates->isEmpty()) {
+    abort(404, 'Sertifikat tidak ditemukan');
+}
 
-        // 2️⃣ siapkan ZIP
-        $zipFileName = "sertifikat-zip-{$id}.zip";
-        $zipPath = storage_path("app/tmp/{$zipFileName}");
+// 2️⃣ siapkan ZIP
+$zipFileName = "sertifikat-zip-{$id}.zip";
+$zipPath = storage_path("app/tmp/{$zipFileName}");
 
-        if (!file_exists(dirname($zipPath))) {
-            mkdir(dirname($zipPath), 0777, true);
-        }
+if (!is_dir(dirname($zipPath))) {
+    mkdir(dirname($zipPath), 0777, true);
+}
 
-        $zip = new ZipArchive;
-        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+$zip = new ZipArchive;
+if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+    abort(500, 'Gagal membuat ZIP');
+}
 
-        // 3️⃣ ambil PDF dari Supabase & masukkan ke ZIP
-        foreach ($certificates as $cert) {
+// 3️⃣ ambil PDF dari Supabase
+foreach ($certificates as $cert) {
 
-            $response = Http::withToken(env('SUPABASE_ANON_KEY'))
-                ->get(
-                    env('SUPABASE_URL') .
-                        "/storage/v1/object/pdf/{$cert->filename}"
-                );
+    $response = Http::get(
+        env('SUPABASE_URL') .
+        "/storage/v1/object/public/pdf/{$cert->filename}"
+    );
 
-            if ($response->ok()) {
-                // simpan ke zip dengan nama aslinya
-                $zip->addFromString(
-                    $cert->filename,
-                    $response->body()
-                );
-            }
-        }
+    if ($response->ok()) {
+        $zip->addFromString($cert->filename, $response->body());
+    }
+}
 
-        $zip->close();
+$zip->close();
 
-        // 4️⃣ kirim ZIP ke browser
-        return response()->download($zipPath)->deleteFileAfterSend(true);
+// 4️⃣ kirim ZIP
+return response()->download($zipPath)->deleteFileAfterSend(true);
+
     }
 
     public function zipDetails($id)
