@@ -85,7 +85,6 @@ class CertificateController extends Controller
             Http::post('https://getcertificate-v1.vercel.app/api/render-pdf', [
                 'body' => $body,
                 'filename' => $certificateName . '-' . $nama . '.pdf',
-                'zip_id' => $zip->id
             ]);
 
             Certificates::create([
