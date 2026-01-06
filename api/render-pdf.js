@@ -1,5 +1,6 @@
 import { chromium } from 'playwright'
 import { createClient } from '@supabase/supabase-js'
+import { fabricToHtml } from '/fabricToHtml.js' // ✅ relative path
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -18,6 +19,16 @@ body {
   height: 1131px;
   position: relative;
   margin: 0;
+}
+.fabric-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.fabric-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 </style>
 
@@ -53,14 +64,18 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { body, fileName } = req.body
+    const { json, filename } = req.body
 
-    if (!body || !fileName) {
+    if (!json || !filename) {
       return res.status(400).json({
         success: false,
-        message: 'body dan fileName wajib diisi'
+        message: 'json dan filename wajib diisi'
       })
     }
+
+    // 🔥 render Fabric JSON → HTML
+    const bodyHtml = fabricToHtml(json)
+    const fullHtml = buildHtml(bodyHtml)
 
     const browser = await chromium.launch({
       headless: true,
@@ -68,10 +83,7 @@ export default async function handler(req, res) {
     })
 
     const page = await browser.newPage()
-
-    await page.setContent(buildHtml(body), {
-      waitUntil: 'load'
-    })
+    await page.setContent(fullHtml, { waitUntil: 'load' })
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
@@ -81,10 +93,10 @@ export default async function handler(req, res) {
 
     await browser.close()
 
-    // ⬆️ upload langsung ke Supabase Storage
+    // ⬆️ upload ke Supabase
     const { error } = await supabase.storage
       .from('pdf')
-      .upload(fileName, pdfBuffer, {
+      .upload(filename, pdfBuffer, {
         contentType: 'application/pdf',
         upsert: true
       })
@@ -93,7 +105,7 @@ export default async function handler(req, res) {
 
     return res.json({
       success: true,
-      fileName
+      filename
     })
   } catch (err) {
     console.error(err)
