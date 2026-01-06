@@ -10,6 +10,10 @@
           "dest": "/$1"
         },
         {
+          "src": "/api/render-pdf",
+          "dest": "/api/render-pdf.js"
+        },
+        {
           "src": "/(.*)",
           "dest": "/api/index.php"
         }
