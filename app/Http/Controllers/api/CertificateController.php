@@ -43,10 +43,7 @@ class CertificateController extends Controller
         $juaras = preg_split('/\r\n|\r|\n/', trim($request->juara));
 
         if (count($names) !== count($juaras)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Nama dan Juara harus sama'
-            ]);
+            return back()->with('error', 'Jumlah nama dan juara harus sama.');
         }
 
         if (count($names) > 5) {
@@ -83,11 +80,12 @@ class CertificateController extends Controller
             }
 
             // 🔥 render HTML dari Fabric
-            // $body = FabricToHtml::render($json);
+            $body = FabricToHtml::render($json);
 
-            Http::post('https://getcertificate-v1.vercel.app/api/render-pdf', [
-                'json' => $json,
+            Http::post(env('https://getcertificate-v1.vercel.app/api/render-pdf'), [
+                'body' => $body,
                 'filename' => $certificateName . '-' . $nama . '.pdf',
+                'zip_id' => $zip->id
             ]);
 
             Certificates::create([
