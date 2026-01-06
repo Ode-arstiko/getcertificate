@@ -13,18 +13,18 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { body, filename } = req.body
+    const { html, filename } = req.body
 
     const browser = await playwrightChromium.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(),
-      headless: chromium.headless
+      headless: true // ✅ FIX UTAMA DI SINI
     })
 
     const page = await browser.newPage()
-    await page.setContent(body, { waitUntil: 'load' })
+    await page.setContent(html, { waitUntil: 'load' })
 
-    const pdf = await page.pdf({
+    const pdfBuffer = await page.pdf({
       format: 'A4',
       landscape: true,
       printBackground: true
@@ -34,16 +34,19 @@ export default async function handler(req, res) {
 
     const { error } = await supabase.storage
       .from('pdf')
-      .upload(filename, pdf, {
+      .upload(filename, pdfBuffer, {
         contentType: 'application/pdf',
         upsert: true
       })
 
     if (error) throw error
 
-    res.json({ success: true })
-  } catch (e) {
-    console.error(e)
-    res.status(500).json({ message: e.message })
+    res.json({ success: true, filename })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({
+      success: false,
+      message: err.message
+    })
   }
 }
