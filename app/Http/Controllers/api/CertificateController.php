@@ -43,7 +43,10 @@ class CertificateController extends Controller
         $juaras = preg_split('/\r\n|\r|\n/', trim($request->juara));
 
         if (count($names) !== count($juaras)) {
-            return back()->with('error', 'Jumlah nama dan juara harus sama.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Nama dan Juara harus sama'
+            ]);
         }
 
         if (count($names) > 5) {
