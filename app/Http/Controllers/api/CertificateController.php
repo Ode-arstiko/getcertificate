@@ -120,35 +120,45 @@ class CertificateController extends Controller
 
     public function downloadZip($id)
     {
+        // 1️⃣ ambil data sertifikat berdasarkan zip_id
         $certificates = Certificates::where('zip_id', $id)->get();
 
         if ($certificates->isEmpty()) {
-            return response()->json([
-                'message' => 'Certificate tidak ditemukan'
-            ], 404);
+            abort(404, 'Sertifikat tidak ditemukan');
         }
 
-        if (!file_exists(public_path('zip'))) {
-            mkdir(public_path('zip'), 0755, true);
+        // 2️⃣ siapkan ZIP
+        $zipFileName = "sertifikat-zip-{$id}.zip";
+        $zipPath = storage_path("app/tmp/{$zipFileName}");
+
+        if (!file_exists(dirname($zipPath))) {
+            mkdir(dirname($zipPath), 0777, true);
         }
 
-        $zipName = $certificates->first()->zip->zip_name . '.zip';
-        $zipPath = public_path('zip/' . $zipName);
+        $zip = new ZipArchive;
+        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        $zip = new \ZipArchive;
-        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-            return response()->json(['message' => 'Gagal membuat zip'], 500);
-        }
+        // 3️⃣ ambil PDF dari Supabase & masukkan ke ZIP
+        foreach ($certificates as $cert) {
 
-        foreach ($certificates as $certificate) {
-            $filePath = public_path('pdf/' . $certificate->certificate_name);
-            if (file_exists($filePath)) {
-                $zip->addFile($filePath, basename($filePath));
+            $response = Http::withToken(env('SUPABASE_ANON_KEY'))
+                ->get(
+                    env('SUPABASE_URL') .
+                        "/storage/v1/object/pdf/{$cert->filename}"
+                );
+
+            if ($response->ok()) {
+                // simpan ke zip dengan nama aslinya
+                $zip->addFromString(
+                    $cert->filename,
+                    $response->body()
+                );
             }
         }
 
         $zip->close();
 
+        // 4️⃣ kirim ZIP ke browser
         return response()->download($zipPath)->deleteFileAfterSend(true);
     }
 
@@ -188,6 +198,6 @@ class CertificateController extends Controller
 
         return response($response->body(), 200)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 }
