@@ -1,52 +1,44 @@
-import chromium from '@sparticuz/chromium'
-import { chromium as playwrightChromium } from 'playwright-core'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-)
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' })
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   try {
-    const { html, filename } = req.body
+    const { html } = req.body;
 
-    const browser = await playwrightChromium.launch({
+    if (!html) {
+      return res.status(400).json({ message: "HTML is required" });
+    }
+
+    const browser = await puppeteer.launch({
       args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath(),
-      headless: true // ✅ FIX UTAMA DI SINI
-    })
+      headless: true,
+    });
 
-    const page = await browser.newPage()
-    await page.setContent(html, { waitUntil: 'load' })
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: "networkidle0" });
 
     const pdfBuffer = await page.pdf({
-      format: 'A4',
-      landscape: true,
-      printBackground: true
-    })
+      format: "A4",
+      printBackground: true,
+    });
 
-    await browser.close()
+    await browser.close();
 
-    const { error } = await supabase.storage
-      .from('pdf')
-      .upload(filename, pdfBuffer, {
-        contentType: 'application/pdf',
-        upsert: true
-      })
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "inline; filename=document.pdf");
+    return res.status(200).send(pdfBuffer);
 
-    if (error) throw error
-
-    res.json({ success: true, filename })
   } catch (err) {
-    console.error(err)
-    res.status(500).json({
-      success: false,
-      message: err.message
-    })
+    console.error(err);
+    return res.status(500).json({
+      message: "PDF render failed",
+      error: err.message,
+    });
   }
 }
