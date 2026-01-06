@@ -82,7 +82,7 @@ class CertificateController extends Controller
             // 🔥 render HTML dari Fabric
             $body = FabricToHtml::render($json);
 
-            Http::post(env('https://getcertificate-v1.vercel.app/api/render-pdf'), [
+            Http::post('https://getcertificate-v1.vercel.app/api/render-pdf', [
                 'body' => $body,
                 'filename' => $certificateName . '-' . $nama . '.pdf',
                 'zip_id' => $zip->id
