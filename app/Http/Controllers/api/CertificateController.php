@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use ZipArchive;
 
 class CertificateController extends Controller
@@ -120,44 +121,42 @@ class CertificateController extends Controller
 
     public function downloadZip($id)
     {
-        // 1️⃣ ambil data sertifikat
-$certificates = Certificates::where('zip_id', $id)->get();
+        // 1️⃣ ambil data sertifikat berdasarkan zip_id
+        $certificates = Certificates::where('zip_id', $id)->get();
 
-if ($certificates->isEmpty()) {
-    abort(404, 'Sertifikat tidak ditemukan');
-}
+        if ($certificates->isEmpty()) {
+            abort(404, 'Sertifikat tidak ditemukan');
+        }
 
-// 2️⃣ siapkan ZIP
-$zipFileName = "sertifikat-zip-{$id}.zip";
-$zipPath = storage_path("app/tmp/{$zipFileName}");
+        $bucket = 'pdf';
+        $supabaseUrl = env('SUPABASE_URL') . '/storage/v1/object/public';
 
-if (!is_dir(dirname($zipPath))) {
-    mkdir(dirname($zipPath), 0777, true);
-}
+        $zipFileName = 'sertifikat.zip';
+        $zipPath = storage_path("app/tmp/{$zipFileName}");
 
-$zip = new ZipArchive;
-if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-    abort(500, 'Gagal membuat ZIP');
-}
+        // pastikan folder tmp ada
+        if (!file_exists(dirname($zipPath))) {
+            mkdir(dirname($zipPath), 0755, true);
+        }
 
-// 3️⃣ ambil PDF dari Supabase
-foreach ($certificates as $cert) {
+        $zip = new ZipArchive;
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            abort(500, 'Gagal membuat ZIP');
+        }
 
-    $response = Http::get(
-        env('SUPABASE_URL') .
-        "/storage/v1/object/public/pdf/{$cert->filename}"
-    );
+        foreach ($certificates as $file) {
+            $fileUrl = "{$supabaseUrl}/{$bucket}/{$file->certificate_name}";
 
-    if ($response->ok()) {
-        $zip->addFromString($cert->filename, $response->body());
-    }
-}
+            $response = Http::get($fileUrl);
 
-$zip->close();
+            if ($response->successful()) {
+                $zip->addFromString($file, $response->body());
+            }
+        }
 
-// 4️⃣ kirim ZIP
-return response()->download($zipPath)->deleteFileAfterSend(true);
+        $zip->close();
 
+        return Response::download($zipPath)->deleteFileAfterSend(true);
     }
 
     public function zipDetails($id)
