@@ -168,13 +168,15 @@ class CertificateController extends Controller
         $zipName = "sertifikat-{$id}-" . time() . ".zip";
         $zipPath = "temp/{$zipName}";
 
+        $binaryZip = stream_get_contents($stream);
+
         $upload = Http::withHeaders([
-            // 'Authorization' => 'Bearer ' . env('SUPABASE_SERVICE_ROLE_KEY'),
-            'apikey'        => env('SUPABASE_ANON_KEY'),
-            'Content-Type'  => 'application/zip',
-        ])->post(
-            env('SUPABASE_URL') . "/storage/v1/object/{$bucketZip}/{$zipPath}",
-            stream_get_contents($stream)
+            'apikey' => env('SUPABASE_ANON_KEY'),
+        ])->withBody(
+            $binaryZip,
+            'application/zip'
+        )->post(
+            env('SUPABASE_URL') . "/storage/v1/object/{$bucketZip}/{$zipPath}"
         );
 
         fclose($stream);
