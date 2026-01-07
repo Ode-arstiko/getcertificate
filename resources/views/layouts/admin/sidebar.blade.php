@@ -48,7 +48,7 @@
                             <span class="hide-menu">Clients App</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
+                    {{-- <li class="sidebar-item">
                         <a class="sidebar-link" href="/admin/ctemplate" aria-expanded="false">
                             <span>
                                 <i class="ti ti-template"></i>
@@ -63,7 +63,7 @@
                             </span>
                             <span class="hide-menu">Certificates</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
