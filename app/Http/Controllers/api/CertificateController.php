@@ -128,35 +128,66 @@ class CertificateController extends Controller
             abort(404, 'Sertifikat tidak ditemukan');
         }
 
-        $bucket = 'pdf';
-        $supabaseUrl = env('SUPABASE_URL') . '/storage/v1/object/public';
+        // 2️⃣ supabase config
+        $bucketPdf = 'pdf';
+        $bucketZip = 'zip-temp';
 
-        $zipFileName = 'sertifikat.zip';
-        $zipPath = storage_path("app/tmp/{$zipFileName}");
+        $supabasePublic = env('SUPABASE_URL') . '/storage/v1/object/public';
 
-        // pastikan folder tmp ada
-        if (!file_exists(dirname($zipPath))) {
-            mkdir(dirname($zipPath), 0755, true);
-        }
+        // 3️⃣ stream temp (RAM → disk fallback)
+        $stream = fopen('php://temp', 'w+b');
 
-        $zip = new ZipArchive;
-        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            abort(500, 'Gagal membuat ZIP');
-        }
+        // 4️⃣ zipstream option
+        $options = new Archive();
+        $options->setSendHttpHeaders(false);
 
-        foreach ($certificates as $file) {
-            $fileUrl = "{$supabaseUrl}/{$bucket}/{$file->certificate_name}";
+        // 5️⃣ init zip stream
+        $zip = new ZipStream(null, $options);
+        $zip->setOutputStream($stream);
+
+        // 6️⃣ isi zip dari supabase pdf
+        foreach ($certificates as $cert) {
+            $fileUrl = "{$supabasePublic}/{$bucketPdf}/{$cert->certificate_name}";
 
             $response = Http::get($fileUrl);
 
-            if ($response->successful()) {
-                $zip->addFromString($file, $response->body());
+            if (!$response->successful()) {
+                continue;
             }
+
+            $zip->addFile(
+                $cert->certificate_name,
+                $response->body()
+            );
         }
 
-        $zip->close();
+        // 7️⃣ finalize zip
+        $zip->finish();
+        rewind($stream);
 
-        return Response::download($zipPath)->deleteFileAfterSend(true);
+        // 8️⃣ upload zip ke supabase
+        $zipName = "sertifikat-{$id}-" . time() . ".zip";
+        $zipPath = "temp/{$zipName}";
+
+        $upload = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('SUPABASE_SERVICE_ROLE_KEY'),
+            'apikey'        => env('SUPABASE_ANON_KEY'),
+            'Content-Type'  => 'application/zip',
+        ])->post(
+            env('SUPABASE_URL') . "/storage/v1/object/{$bucketZip}/{$zipPath}",
+            stream_get_contents($stream)
+        );
+
+        fclose($stream);
+
+        if (!$upload->successful()) {
+            abort(500, 'Gagal upload ZIP ke Supabase');
+        }
+
+        // 9️⃣ kirim URL ke client
+        return response()->json([
+            'url' => "{$supabasePublic}/{$bucketZip}/{$zipPath}"
+        ]);
     }
 
     public function zipDetails($id)
