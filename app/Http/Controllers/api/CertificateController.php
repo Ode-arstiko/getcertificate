@@ -180,7 +180,7 @@ class CertificateController extends Controller
         }
 
         $filename = $certificate->certificate_name;
-        $url = env('SUPABASE_URL') . "/storage/v1/object/public/pdf/" . $filename . ".pdf";
+        $url = env('SUPABASE_URL') . "/storage/v1/object/public/pdf/" . $filename;
 
         return response()->json([
             'success' => true,
