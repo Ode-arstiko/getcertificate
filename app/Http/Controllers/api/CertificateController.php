@@ -61,6 +61,9 @@ class CertificateController extends Controller
         ]);
 
         foreach ($names as $i => $nama) {
+            $safeNama = trim($nama);
+            $safeNama = preg_replace('/\s+/', '-', $safeNama); // spasi jadi strip
+            $safeNama = preg_replace('/[^A-Za-z0-9\-]/', '', $safeNama); // buang karakter aneh
 
             // decode fabric json
             $json = json_decode($template->elements, true);
@@ -83,14 +86,16 @@ class CertificateController extends Controller
             // 🔥 render HTML dari Fabric
             $body = FabricToHtml::render($json);
 
+            $filename = $certificateName . '-' . $safeNama . '.pdf';
+
             Http::post('https://getcertificate-v1.vercel.app/api/render-pdf', [
                 'body' => $body,
-                'filename' => $certificateName . '-' . $nama . '.pdf',
+                'filename' => $filename,
             ]);
 
             Certificates::create([
                 'zip_id' => $zip->id,
-                'certificate_name' => $certificateName . '-' . $nama . '.pdf',
+                'certificate_name' => $filename,
             ]);
         }
 
@@ -147,7 +152,7 @@ class CertificateController extends Controller
                 'error'   => $response->body(),
             ], 500);
         }
-    
+
         return response()->json($response->json());
     }
 
