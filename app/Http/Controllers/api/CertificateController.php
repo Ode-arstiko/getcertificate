@@ -182,13 +182,11 @@ class CertificateController extends Controller
         }
 
         $filename = $certificate->certificate_name;
+        $url = env('SUPABASE_URL') . "/storage/v1/object/public/pdf/" . $filename . ".pdf";
 
-        $response = Http::get('https://getcertificate-v1.vercel.app/api/download-pdf', [
-            'file' => $filename
+        return response()->json([
+            'success' => true,
+            'url' => $url
         ]);
-
-        return response($response->body(), 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
     }
 }
