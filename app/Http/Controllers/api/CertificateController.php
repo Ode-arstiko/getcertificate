@@ -47,12 +47,12 @@ class CertificateController extends Controller
             return back()->with('error', 'Jumlah nama dan juara harus sama.');
         }
 
-        if (count($names) > 5) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Maksimal 5 data per request'
-            ], 422);
-        }
+        // if (count($names) > 5) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Maksimal 5 data per request'
+        //     ], 422);
+        // }
 
         // zip
         $zip = Zips::create([
