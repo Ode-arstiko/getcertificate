@@ -189,7 +189,8 @@ class CertificateController extends Controller
 
         return response()->json([
             'success' => true,
-            'url' => $url
+            'url' => $url,
+            'filename' => $certificate->certificate_name
         ]);
     }
 }
