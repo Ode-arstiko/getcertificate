@@ -24,9 +24,9 @@ class CertificateController extends Controller
     {
         $zip = Zips::where('client_id', $request->get('app_id'))->latest()->get();
 
-        return response()->json([
-            $zip,
-        ]);
+        return response()->json(
+            $zip
+        );
     }
 
     public function store(Request $request)
