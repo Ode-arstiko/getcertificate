@@ -23,11 +23,9 @@ class CertificateController extends Controller
     public function index(Request $request)
     {
         $zip = Zips::where('client_id', $request->get('app_id'))->latest()->get();
-        $template = Ctemplates::where('client_id', $request->get('app_id'))->latest()->get();
 
         return response()->json([
             'zips' => $zip,
-            'template' => $template
         ]);
     }
 
